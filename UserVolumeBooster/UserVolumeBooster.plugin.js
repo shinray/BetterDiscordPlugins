@@ -305,7 +305,7 @@ function buildPlugin([BasePlugin, PluginApi]) {
 			getData,
 			setData
 		} = BdApi;
-		const Slider = getByName("Slider");
+		const Slider = ZLibrary.WebpackModules.getModuleByName("Slider");
 		const FormItem = getByName("FormItem");
 		class Plugin {
 			start() {
