@@ -303,10 +303,13 @@ function buildPlugin([BasePlugin, PluginApi]) {
 			findModuleByProps: getByProps,
 			findModuleByDisplayName: getByName,
 			getData,
-			setData
+			setData,
+			Webpack
 		} = BdApi;
 		const Slider = ZLibrary.WebpackModules.getModuleByName("Slider");
-		const FormItem = getByName("FormItem");
+		const filter = BdApi.Webpack.Filters.byStrings(`["tag","children","className","faded","disabled","required","error"]`),
+				target = BdApi.Webpack.getModule(m => Object.values(m).some(filter));
+		const FormTitle = target[Object.keys(target).find(k => filter(target[k]))];
 		class Plugin {
 			start() {
 				console.log("%cUser Volume Booster", "background: #61DBFB; color: black; padding: 2px; border-radius: 4px; font-weight: bold;", "Successfully started.");
@@ -329,9 +332,10 @@ function buildPlugin([BasePlugin, PluginApi]) {
 				return getData("UserVolumeBooster", "multiplier") ?? 2;
 			}
 			getSettingsPanel() {
-				return React.createElement(FormItem, {
-					title: "Volume Multiplier"
-				}, React.createElement(Slider, {
+				return React.createElement(FormTitle, {
+					tag: "h3",
+				}, "Volume Multiplier", 
+				React.createElement(Slider, {
 					initialValue: this.getMultiplier(),
 					max: 5,
 					min: 1,
